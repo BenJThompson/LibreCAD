@@ -140,6 +140,7 @@ public:
         EntityMText,         /**< Multi-line Text */
         EntityText,         /**< Single-line Text */
         EntityDimAligned,   /**< Aligned Dimension */
+        EntityDimOrdinate,  /**< Ordinate Dimension */
         EntityDimLinear,    /**< Linear Dimension */
         EntityDimRadial,    /**< Radial Dimension */
         EntityDimDiametric, /**< Diametric Dimension */
@@ -289,6 +290,7 @@ public:
         ActionPolylineSegment,
 
         ActionDimAligned,
+        ActionDimOrdinate,
         ActionDimLinear,
         ActionDimLinearVer,
         ActionDimLinearHor,

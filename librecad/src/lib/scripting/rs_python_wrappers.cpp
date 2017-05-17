@@ -218,6 +218,7 @@ BOOST_PYTHON_MODULE(librecad)
 	.value("DimDiametric", RS2::EntityDimDiametric)
 	.value("DimAngular", RS2::EntityDimAngular)
 	.value("DimLeader", RS2::EntityDimLeader)
+	.value("DimOrdinate", RS2::EntityDimOrdinate)
 	.value("Hatch", RS2::EntityHatch)
 	.value("Image", RS2::EntityImage)
     ;
