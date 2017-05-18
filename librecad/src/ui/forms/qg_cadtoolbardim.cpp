@@ -89,6 +89,10 @@ void QG_CadToolBarDim::restoreAction()
         actionHandler->slotDimLeader();
         return;
     }
+    if ( bOrdinate ->isChecked() ) {
+        actionHandler->slotDimOrdinate();
+        return;
+    }
     //clear all action
 	m_pHidden->setChecked(true);
     RS_ActionInterface* currentAction =actionHandler->getCurrentAction();
@@ -133,6 +137,9 @@ void  QG_CadToolBarDim::showCadToolBar(RS2::ActionType actionType){
         return;
     case RS2::ActionDimLeader:
         bLeader->setChecked(true);
+        return;
+    case RS2::ActionDimOrdinate:
+        bOrdinate->setChecked(true);
         return;
     default:
 		m_pHidden->setChecked(true);

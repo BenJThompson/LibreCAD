@@ -135,7 +135,8 @@ LC_WidgetFactory::LC_WidgetFactory(QC_ApplicationWindow* main_win,
             << a_map["DimRadial"]
             << a_map["DimDiametric"]
             << a_map["DimAngular"]
-            << a_map["DimLeader"];
+            << a_map["DimLeader"]
+            << a_map["DimOrdinate"];
 
     modify_actions
             << a_map["ModifyMove"]

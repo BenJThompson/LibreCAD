@@ -374,6 +374,7 @@ void QG_CadToolBar::showCadToolBar(RS2::ActionType actionType, bool cleanup){
     case RS2::ActionDimDiametric:
     case RS2::ActionDimAngular:
     case RS2::ActionDimLeader:
+    case RS2::ActionDimOrdinate:
 		id=RS2::ToolBarDim;
         break;
     case RS2::ActionModifyAttributes:

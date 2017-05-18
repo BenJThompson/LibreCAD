@@ -120,7 +120,9 @@ public slots:
 	void slotDrawLineAngle();
 	void slotDrawLineHorizontal();
 	void slotDrawLineVertical();
-	void slotDrawLineFree();
+    void slotDrawLineFree();	void slotDrawEllipseFociPoint();	void slotDrawEllipse4Points();
+
+
 	void slotDrawLineHorVert();
 	void slotDrawLineParallel();
 	void slotDrawLineParallelThrough();
@@ -151,8 +153,6 @@ public slots:
 	void slotDrawArcTangential();
 	void slotDrawEllipseAxis();
 	void slotDrawEllipseArcAxis();
-	void slotDrawEllipseFociPoint();
-	void slotDrawEllipse4Points();
 	void slotDrawEllipseCenter3Points();
 	void slotDrawEllipseInscribe();
 	void slotDrawSpline();
@@ -178,6 +178,7 @@ public slots:
 	void slotDimDiametric();
 	void slotDimAngular();
 	void slotDimLeader();
+    void slotDimOrdinate();
 
 	void slotModifyAttributes();
 	void slotModifyDelete();

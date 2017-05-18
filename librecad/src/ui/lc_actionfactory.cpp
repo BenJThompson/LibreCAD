@@ -565,6 +565,13 @@ void LC_ActionFactory::fillActionContainer(QMap<QString, QAction*>& a_map, LC_Ac
     action->setObjectName("DimLeader");
     a_map["DimLeader"] = action;
 
+    action = new QAction(tr("&Ordinate"), agm->dimension);
+    action->setIcon(QIcon(":/icons/dim_ordinate.svg"));
+    connect(action, SIGNAL(triggered()),
+    action_handler, SLOT(slotDimOrdinate()));
+    action->setObjectName("DimOrdinate");
+    a_map["DimOrdinate"] = action;
+
     // <[~ Modify ~]>
 
     action = new QAction(tr("&Attributes"), agm->modify);

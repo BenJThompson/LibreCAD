@@ -214,6 +214,9 @@ Plugin_Entity::Plugin_Entity(RS_EntityContainer* parent, enum DPI::ETYPE type){
         break;
     case DPI::DIMANGULAR:
         entity = new RS_DimAngular();
+        break;
+    case DPI::DIMORDINATE:
+        entity = new RS_DimOrdinate();
         break;*/
     default:
         break;
@@ -367,6 +370,9 @@ void Plugin_Entity::getData(QHash<int, QVariant> *data){
         break;
     case RS2::EntityDimLeader:
         data->insert(DPI::ETYPE, DPI::DIMLEADER);
+        break;
+    case RS2::EntityDimOrdinate:
+        data->insert(DPI::ETYPE, DPI::DIMORDINATE);
         break;
     case RS2::EntityUnknown:
     default:
@@ -626,6 +632,8 @@ void Plugin_Entity::updateData(QHash<int, QVariant> *data){
     case RS2::EntityDimAngular:
         break;
     case RS2::EntityDimLeader:
+        break;
+    case RS2::EntityDimOrdinate:
         break;
     case RS2::EntityUnknown:
     default:

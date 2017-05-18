@@ -559,7 +559,15 @@ RS_Commands::RS_Commands() {
             {{"area", QObject::tr("area", "measure area")}},
             {{"ar", QObject::tr("ar", "measure area")}},
             RS2::ActionInfoArea
-        }
+        },
+    //dimension ordinate
+    {
+        {{"dimordinate", QObject::tr("dimordinate", "dimension - ordinate")}},
+        {{"dimdiameter", QObject::tr("dimordinate", "dimension - ordinate")},
+        {"dd", QObject::tr("ord", "dimension - ordinate")}},
+        RS2::ActionDimOrdinate
+        },
+
     };
 
     for(auto const& c0: commandList){

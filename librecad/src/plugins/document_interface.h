@@ -73,6 +73,7 @@ namespace DPI {
         DIMRADIAL,
         DIMDIAMETRIC,
         DIMANGULAR,
+        DIMORDINATE,
         UNKNOWN
     };
 

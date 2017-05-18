@@ -46,6 +46,7 @@
 #include "rs_actiondimangular.h"
 #include "rs_actiondimdiametric.h"
 #include "rs_actiondimleader.h"
+#include "rs_actiondimordinate.h"
 #include "rs_actiondimlinear.h"
 #include "rs_actiondimradial.h"
 #include "rs_actiondrawarc.h"
@@ -589,6 +590,9 @@ RS_ActionInterface* QG_ActionHandler::setCurrentAction(RS2::ActionType id) {
         break;
     case RS2::ActionDimLeader:
         a = new RS_ActionDimLeader(*document, *view);
+        break;
+    case RS2::ActionDimOrdinate:
+        a = new RS_ActionDimOrdinate(*document, *view);
         break;
 
         // Modifying actions:
@@ -1526,6 +1530,10 @@ void QG_ActionHandler::slotDimAngular() {
 
 void QG_ActionHandler::slotDimLeader() {
     setCurrentAction(RS2::ActionDimLeader);
+}
+
+void QG_ActionHandler::slotDimOrdinate() {
+    setCurrentAction(RS2::ActionDimOrdinate);
 }
 
 
