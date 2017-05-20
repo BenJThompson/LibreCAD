@@ -333,7 +333,7 @@ RS_Commands::RS_Commands() {
 		{{"dimdiameter", QObject::tr("dimdiameter", "dimension - diametric")},
 		 {"dd", QObject::tr("dd", "dimension - diametric")}},
 		RS2::ActionDimDiametric
-	},
+    },
         //dimension leader
         {
             {{"dimleader", QObject::tr("dimleader", "dimension - leader")}},
@@ -563,8 +563,8 @@ RS_Commands::RS_Commands() {
     //dimension ordinate
     {
         {{"dimordinate", QObject::tr("dimordinate", "dimension - ordinate")}},
-        {{"dimdiameter", QObject::tr("dimordinate", "dimension - ordinate")},
-        {"dd", QObject::tr("ord", "dimension - ordinate")}},
+        {{"dimord", QObject::tr("dimord", "dimension - ordinate")},
+        {"ord", QObject::tr("ord", "dimension - ordinate")}},
         RS2::ActionDimOrdinate
         },
 
