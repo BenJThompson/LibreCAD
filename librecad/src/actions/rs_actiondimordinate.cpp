@@ -24,6 +24,7 @@
 **
 **********************************************************************/
 #include<cmath>
+#include<vector>
 #include <QAction>
 #include <QMouseEvent>
 #include "rs_actiondimordinate.h"
@@ -38,17 +39,25 @@
 #include "rs_preview.h"
 #include "rs_debug.h"
 
+
+struct RS_ActionDimOrdinate::Points {
+std::vector<RS_Vector> points;
+};
+
+
 RS_ActionDimOrdinate::RS_ActionDimOrdinate(RS_EntityContainer& container,
         RS_GraphicView& graphicView)
         :RS_ActionDimension("Draw ordinate dimensions",
-                    container, graphicView) {
+                    container, graphicView)
+    , pPoints(new Points{})
+    {
     actionType=RS2::ActionDimOrdinate;
 	reset();
 }
 
 
-
 RS_ActionDimOrdinate::~RS_ActionDimOrdinate()  = default;
+
 
 void RS_ActionDimOrdinate::reset() {
     RS_ActionDimension::reset();
@@ -56,10 +65,17 @@ void RS_ActionDimOrdinate::reset() {
     edata.reset(new RS_DimOrdinateData(RS_Vector(false),
 							  RS_Vector(false))
 				);
-    lastStatus = SetExtPoint1;
+    lastStatus = SetOriginPoint;
 	RS_DIALOGFACTORY->requestOptions(this, true, true);
+    pPoints->points.clear();
 }
 
+
+void RS_ActionDimOrdinate::init(int status) {
+     RS_PreviewActionInterface::init(status);
+
+    reset();
+}
 
 
 void RS_ActionDimOrdinate::trigger() {
@@ -92,7 +108,7 @@ void RS_ActionDimOrdinate::trigger() {
 }
 
 
-
+//this is drawing
 void RS_ActionDimOrdinate::preparePreview() {
 	RS_Vector dirV = RS_Vector::polar(100.,
 				  edata->extensionPoint1.angleTo(
@@ -108,17 +124,17 @@ void RS_ActionDimOrdinate::preparePreview() {
 }
 
 
-
+//these are events
 void RS_ActionDimOrdinate::mouseMoveEvent(QMouseEvent* e) {
     RS_DEBUG->print("RS_ActionDimOrdinate::mouseMoveEvent begin");
 
     RS_Vector mouse = snapPoint(e);
 
     switch (getStatus()) {
-    case SetExtPoint1:
+    case SetOriginPoint:
         break;
 
-    case SetExtPoint2:
+    case SetExtPoint:
 		if (edata->extensionPoint1.valid) {
             deletePreview();
             preview->addEntity(
@@ -163,30 +179,39 @@ void RS_ActionDimOrdinate::mouseReleaseEvent(QMouseEvent* e) {
 }
 
 
+//look here
+void RS_ActionDimOrdinate::keyPressEvent(QKeyEvent* e) {
+    if (getStatus()==SetOriginPoint && e->key()==Qt::Key_Enter) {
+        trigger();
+        reset();
+        setStatus(SetDefPoint);
+    }
+}
 
+//and here
 void RS_ActionDimOrdinate::coordinateEvent(RS_CoordinateEvent* e) {
-	if (!e) return;
+    if (!e) return;
 
     RS_Vector pos = e->getCoordinate();
 
     switch (getStatus()) {
-    case SetExtPoint1:
-		edata->extensionPoint1 = pos;
+    case SetOriginPoint:
+        edata->extensionPoint1 = pos;
         graphicView->moveRelativeZero(pos);
-        setStatus(SetExtPoint2);
+        setStatus(SetExtPoint);
         break;
 
-    case SetExtPoint2:
+    case SetExtPoint:
 		edata->extensionPoint2 = pos;
         graphicView->moveRelativeZero(pos);
         setStatus(SetDefPoint);
         break;
 
     case SetDefPoint:
-		data->definitionPoint = pos;
+        data->definitionPoint = pos;
         trigger();
         reset();
-        setStatus(SetExtPoint1);
+        setStatus(SetExtPoint);
         break;
 
     default:
@@ -230,8 +255,8 @@ QStringList RS_ActionDimOrdinate::getAvailableCommands() {
     QStringList cmd;
 
     switch (getStatus()) {
-    case SetExtPoint1:
-    case SetExtPoint2:
+    case SetOriginPoint:
+    case SetExtPoint:
     case SetDefPoint:
         cmd += command("text");
         break;
@@ -244,25 +269,38 @@ QStringList RS_ActionDimOrdinate::getAvailableCommands() {
 }
 
 
+void RS_ActionDimOrdinate::hideOptions() {
+    RS_DIALOGFACTORY->requestOptions(this, false);
+
+    RS_ActionDimension::hideOptions();
+}
+
+
+void RS_ActionDimOrdinate::showOptions() {
+    RS_ActionDimension::showOptions();
+
+    RS_DIALOGFACTORY->requestOptions(this, true);
+}
+
 
 void RS_ActionDimOrdinate::updateMouseButtonHints() {
-	switch (getStatus()) {
-	case SetExtPoint1:
+    switch (getStatus()) {
+    case SetOriginPoint:
 		RS_DIALOGFACTORY->updateMouseWidget(
-					tr("Specify first extension line origin"),
+                    tr("Set the origin point"),
 					tr("Cancel"));
 		break;
-	case SetExtPoint2:
+    case SetExtPoint:
 		RS_DIALOGFACTORY->updateMouseWidget(
-					tr("Specify second extension line origin"),
+                    tr("Set the point"),
 					tr("Back"));
 		break;
-	case SetDefPoint:
-		RS_DIALOGFACTORY->updateMouseWidget(
-					tr("Specify dimension line location"),
-					tr("Back"));
-		break;
-	case SetText:
+    case SetDefPoint:
+        RS_DIALOGFACTORY->updateMouseWidget(
+                    tr("Place the dimention text"),
+                    tr("Back"));
+        break;
+    case SetText:
 		RS_DIALOGFACTORY->updateMouseWidget(tr("Enter dimension text:"), "");
 		break;
 	default:
@@ -272,19 +310,8 @@ void RS_ActionDimOrdinate::updateMouseButtonHints() {
 }
 
 
-
-void RS_ActionDimOrdinate::hideOptions() {
-	RS_DIALOGFACTORY->requestOptions(this, false);
-
-    RS_ActionDimension::hideOptions();
-}
-
-
-
-void RS_ActionDimOrdinate::showOptions() {
-    RS_ActionDimension::showOptions();
-
-	RS_DIALOGFACTORY->requestOptions(this, true);
+void RS_ActionDimOrdinate::updateMouseCursor() {
+    graphicView->setMouseCursor(RS2::CadCursor);
 }
 
 // EOF

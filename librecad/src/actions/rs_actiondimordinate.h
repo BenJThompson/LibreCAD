@@ -44,10 +44,10 @@ public:
      * Action States.
      */
     enum Status {
-        SetExtPoint1,    /**< Setting the 1st ext point.  */
-        SetExtPoint2,    /**< Setting the 2nd ext point. */
-        SetDefPoint,     /**< Setting the common def point */
-                SetText          /**< Setting the text label in command line */
+        SetOriginPoint,    /**< Setting the origin point.  */
+        SetExtPoint,       /**< Setting the ext point. */
+        SetDefPoint,       /**< Setting the definite point for the text placement */
+        SetText            /**< Setting the text label in command line */
     };
 
 public:
@@ -56,21 +56,23 @@ public:
     ~RS_ActionDimOrdinate() override;
 
 	void reset() override;
-
-	void trigger() override;
-        void preparePreview();
+    void init(int status=0) override;
+    void trigger() override;
+    void preparePreview();
 
 	void mouseMoveEvent(QMouseEvent* e) override;
 	void mouseReleaseEvent(QMouseEvent* e) override;
+    void keyPressEvent(QKeyEvent*) override;
 
-		void coordinateEvent(RS_CoordinateEvent* e) override;
+    void coordinateEvent(RS_CoordinateEvent* e) override;
 	void commandEvent(RS_CommandEvent* e) override;
-		QStringList getAvailableCommands() override;
+    QStringList getAvailableCommands() override;
 
 	void hideOptions() override;
 	void showOptions() override;
 
 	void updateMouseButtonHints() override;
+    void updateMouseCursor() override;
 
 protected:
 		/**
@@ -80,6 +82,12 @@ protected:
 
 		/** Last status before entering text. */
 		Status lastStatus;
+
+        /**
+         * Points set so far.
+         */
+        struct Points;
+        std::unique_ptr<Points> pPoints;
 }
 ;
 
