@@ -43,10 +43,8 @@ RS_DimOrdinateData::RS_DimOrdinateData():
 /**
  * Constructor with initialisation.
  *
-	* @para extensionPoint1 Definition point. Startpoint of the
- *         first extension line.
-	* @para extensionPoint2 Definition point. Startpoint of the
- *         second extension line.
+    * @para originPoint Definition point. Startpoint of the
+ *          origin extension line.
  */
 RS_DimOrdinateData::RS_DimOrdinateData(const RS_Vector& _extensionPoint1,
 				  const RS_Vector& _extensionPoint2):

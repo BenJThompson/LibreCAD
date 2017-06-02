@@ -110,14 +110,14 @@ void RS_ActionDimOrdinate::trigger() {
 
 //this is drawing
 void RS_ActionDimOrdinate::preparePreview() {
-	RS_Vector dirV = RS_Vector::polar(100.,
+    RS_Vector dirV = RS_Vector::polar(100.,
                   edata->originPoint.angleTo(
 					  edata->extensionPoint2)
-				  +M_PI_2);
-	RS_ConstructionLine cl(nullptr,
+                  +M_PI_2);
+    RS_ConstructionLine cl(nullptr,
                            RS_ConstructionLineData(
-							   edata->extensionPoint2,
-							   edata->extensionPoint2+dirV));
+                               edata->extensionPoint2,
+                               edata->extensionPoint2+dirV));
 
     data->definitionPoint =
         cl.getNearestPointOnEntity(data->definitionPoint);
@@ -143,7 +143,20 @@ void RS_ActionDimOrdinate::mouseMoveEvent(QMouseEvent* e) {
             drawPreview();
         }
         break;
+    case SetOriginDefPoint:
+        if (edata->originPoint.valid && edata->extensionPoint2.valid) {
+            deletePreview();
+            data->definitionPoint = mouse;
 
+            preparePreview();
+
+                        //data->text = getText();
+            RS_DimOrdinate* dim = new RS_DimOrdinate(preview.get(), *data, *edata);
+            preview->addEntity(dim);
+            dim->update();
+            drawPreview();
+        }
+        break;
     case SetDefPoint:
         if (edata->originPoint.valid && edata->extensionPoint2.valid) {
             deletePreview();
@@ -209,7 +222,7 @@ void RS_ActionDimOrdinate::coordinateEvent(RS_CoordinateEvent* e) {
         break;
 
     case SetExtPoint:
-		edata->extensionPoint2 = pos;
+        edata->extensionPoint2 = pos;
         graphicView->moveRelativeZero(pos);
         setStatus(SetDefPoint);
         break;
@@ -262,6 +275,7 @@ QStringList RS_ActionDimOrdinate::getAvailableCommands() {
 
     switch (getStatus()) {
     case SetOriginPoint:
+    case SetOriginDefPoint:
     case SetExtPoint:
     case SetDefPoint:
         cmd += command("text");
@@ -295,7 +309,12 @@ void RS_ActionDimOrdinate::updateMouseButtonHints() {
 		RS_DIALOGFACTORY->updateMouseWidget(
                     tr("Set the origin point"),
 					tr("Cancel"));
-		break;
+        break;
+    case SetOriginDefPoint:
+        RS_DIALOGFACTORY->updateMouseWidget(
+                    tr("Place the origin text"),
+                    tr("Back"));
+        break;
     case SetExtPoint:
 		RS_DIALOGFACTORY->updateMouseWidget(
                     tr("Set the point"),
