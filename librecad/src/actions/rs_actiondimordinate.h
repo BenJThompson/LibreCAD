@@ -44,10 +44,11 @@ public:
      * Action States.
      */
     enum Status {
-        SetOriginPoint,    /**< Setting the origin point.  */
-        SetExtPoint,       /**< Setting the ext point. */
-        SetDefPoint,       /**< Setting the definite point for the text placement */
-        SetText            /**< Setting the text label in command line */
+        SetOriginPoint,    /**< Set the origin point.  */
+        SetOriginDefPoint, /**< Set the definite point for the text placement */
+        SetExtPoint,       /**< Set the point to be measured */
+        SetDefPoint,       /**< Set the definite point for the text placement */
+        SetText            /**< Set the text label in command line */
     };
 
 public:

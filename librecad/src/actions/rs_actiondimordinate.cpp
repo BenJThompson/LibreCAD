@@ -111,7 +111,7 @@ void RS_ActionDimOrdinate::trigger() {
 //this is drawing
 void RS_ActionDimOrdinate::preparePreview() {
 	RS_Vector dirV = RS_Vector::polar(100.,
-				  edata->extensionPoint1.angleTo(
+                  edata->originPoint.angleTo(
 					  edata->extensionPoint2)
 				  +M_PI_2);
 	RS_ConstructionLine cl(nullptr,
@@ -135,17 +135,17 @@ void RS_ActionDimOrdinate::mouseMoveEvent(QMouseEvent* e) {
         break;
 
     case SetExtPoint:
-		if (edata->extensionPoint1.valid) {
+        if (edata->originPoint.valid) {
             deletePreview();
             preview->addEntity(
-				new RS_Line{preview.get(),edata->extensionPoint1, mouse}
+                new RS_Line{preview.get(),edata->originPoint, mouse}
             );
             drawPreview();
         }
         break;
 
     case SetDefPoint:
-		if (edata->extensionPoint1.valid && edata->extensionPoint2.valid) {
+        if (edata->originPoint.valid && edata->extensionPoint2.valid) {
             deletePreview();
 			data->definitionPoint = mouse;
 
@@ -188,7 +188,7 @@ void RS_ActionDimOrdinate::keyPressEvent(QKeyEvent* e) {
     }
 }
 
-//and here
+//State machine
 void RS_ActionDimOrdinate::coordinateEvent(RS_CoordinateEvent* e) {
     if (!e) return;
 
@@ -196,8 +196,15 @@ void RS_ActionDimOrdinate::coordinateEvent(RS_CoordinateEvent* e) {
 
     switch (getStatus()) {
     case SetOriginPoint:
-        edata->extensionPoint1 = pos;
+        edata->originPoint = pos;
         graphicView->moveRelativeZero(pos);
+        setStatus(SetOriginDefPoint);
+        break;
+
+    case SetOriginDefPoint:
+        data->definitionPoint = pos;
+        trigger();
+        reset();
         setStatus(SetExtPoint);
         break;
 
@@ -209,7 +216,6 @@ void RS_ActionDimOrdinate::coordinateEvent(RS_CoordinateEvent* e) {
 
     case SetDefPoint:
         data->definitionPoint = pos;
-        trigger();
         reset();
         setStatus(SetExtPoint);
         break;

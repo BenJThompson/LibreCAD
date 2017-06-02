@@ -46,13 +46,15 @@ struct RS_DimOrdinateData {
 		* @para extensionPoint2 Definition point. Startpoint of the
 	 *         second extension line.
 	 */
-    RS_DimOrdinateData(const RS_Vector& extensionPoint1,
-					  const RS_Vector& extensionPoint2);
+    RS_DimOrdinateData(const RS_Vector& originPoint,
+    //TODO remove def
+                      const RS_Vector& extensionPoint2);
 
 	/** Definition point. Startpoint of the first extension line. */
-	RS_Vector extensionPoint1;
-	/** Definition point. Startpoint of the second extension line. */
-	RS_Vector extensionPoint2;
+    RS_Vector originPoint;
+    //TODO remove def
+    /** Definition point. Startpoint of the second extension line.*/
+    RS_Vector extensionPoint2;
 };
 
 std::ostream& operator << (std::ostream& os, const RS_DimOrdinateData& dd);
@@ -60,7 +62,7 @@ std::ostream& operator << (std::ostream& os, const RS_DimOrdinateData& dd);
 /**
  * Class for ordinate dimension entities.
  *
- * @author Andrew Mustun
+ * @author Ben Thompson
  */
 class RS_DimOrdinate : public RS_Dimension {
 public:
@@ -87,9 +89,10 @@ public:
 
 	void updateDim(bool autoText=false) override;
 
-	RS_Vector const& getExtensionPoint1() const;
+    RS_Vector const& getOriginPoint() const;
 
-	RS_Vector const& getExtensionPoint2() const;
+    //TODO remove def
+    //RS_Vector const& getExtensionPoint2() const;
 
     /**
      * Recalculate the original Dimension Point to remove Dim oblique angle.
