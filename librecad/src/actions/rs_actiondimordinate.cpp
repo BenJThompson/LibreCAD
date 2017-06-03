@@ -132,6 +132,7 @@ void RS_ActionDimOrdinate::mouseMoveEvent(QMouseEvent* e) {
 
     switch (getStatus()) {
     case SetOriginPoint:
+        drawPreview();
         break;
 
     case SetExtPoint:
@@ -144,7 +145,7 @@ void RS_ActionDimOrdinate::mouseMoveEvent(QMouseEvent* e) {
         }
         break;
     case SetOriginDefPoint:
-        if (edata->originPoint.valid && edata->extensionPoint2.valid) {
+        if (edata->originPoint.valid) {
             deletePreview();
             data->definitionPoint = mouse;
 

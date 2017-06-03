@@ -172,10 +172,26 @@ void RS_DimOrdinate::updateDim(bool autoText) {
     // text distance to line (DIMGAP)
     //double dimgap = getDimensionLineGap();
 
+    double extAngle,extLength;
     // Angle from extension endpoints towards dimension line
-	double extAngle = edata.extensionPoint2.angleTo(data.definitionPoint);
     // extension lines length
-	double extLength = edata.extensionPoint2.distanceTo(data.definitionPoint);
+    double unconstrainedAngle = edata.originPoint.angleTo(data.definitionPoint);
+    if (unconstrainedAngle < M_PI_4){
+        extAngle = 0;
+        extLength = abs(edata.originPoint.x - data.definitionPoint.x);
+    }else if (unconstrainedAngle < 3 * M_PI_4){
+        extAngle = M_PI_2;
+        extLength = abs(edata.originPoint.y - data.definitionPoint.y);
+    }else if (unconstrainedAngle < 5 * M_PI_4){
+        extAngle = M_PI;
+        extLength = abs(edata.originPoint.x - data.definitionPoint.x);
+    }else if (unconstrainedAngle < 7 * M_PI_4){
+        extAngle = 3 * M_PI_2;
+        extLength = abs(edata.originPoint.y - data.definitionPoint.y);
+    }else{
+        extAngle = 0;
+        extLength = abs(edata.originPoint.x - data.definitionPoint.x);
+    }
 
     if (getFixedLengthOn()){
         double dimfxl = getFixedLength();
@@ -202,6 +218,8 @@ void RS_DimOrdinate::updateDim(bool autoText) {
 	line->setLayer(nullptr);
     addEntity(line);
 
+    //TODO remove extension line 2 definition
+    /*
     // Extension line 2:
 	line = new RS_Line{this,
 			edata.extensionPoint2 + v1,
@@ -212,10 +230,11 @@ void RS_DimOrdinate::updateDim(bool autoText) {
     line->setPen(pen);
 	line->setLayer(nullptr);
     addEntity(line);
+    */
 
     // Dimension line:
     updateCreateDimensionLine(edata.originPoint + e1*extLength,
-                              edata.extensionPoint2 + e1*extLength,
+                              edata.originPoint + 5.0 + e1*extLength,
                                                           true, true, autoText);
 
     calculateBorders();
