@@ -176,6 +176,8 @@ void RS_DimOrdinate::updateDim(bool autoText) {
     // Angle from extension endpoints towards dimension line
     // extension lines length
     double unconstrainedAngle = edata.originPoint.angleTo(data.definitionPoint);
+    //TODO remove this debug print line
+    qDebug( "Angle: %f, Origin: %f, Def: %f", unconstrainedAngle, edata.originPoint, data.definitionPoint );
     if (unconstrainedAngle < M_PI_4){
         extAngle = 0;
         extLength = abs(edata.originPoint.x - data.definitionPoint.x);
@@ -233,10 +235,10 @@ void RS_DimOrdinate::updateDim(bool autoText) {
     */
 
     // Dimension line:
-    updateCreateDimensionLine(edata.originPoint + e1*extLength,
+    /*updateCreateDimensionLine(edata.originPoint + e1*extLength,
                               edata.originPoint + 5.0 + e1*extLength,
                                                           true, true, autoText);
-
+    */
     calculateBorders();
 }
 
